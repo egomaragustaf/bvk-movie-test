@@ -20,7 +20,6 @@ export function Navbar() {
           <Link to="/">BVK Movie</Link>
         </h1>
         <ul className="flex items-center justify-center gap-6 ">
-          <ModeToggle />
           {navbar.map((nav) => {
             return (
               <li key={nav.text} className="hover:text-green-500">
@@ -28,6 +27,7 @@ export function Navbar() {
               </li>
             );
           })}
+          <ModeToggle />
         </ul>
       </nav>
     </div>
