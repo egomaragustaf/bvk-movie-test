@@ -51,8 +51,8 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1>Movie List</h1>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-4 md:p-6">
+      <h1 className="text-4xl">Movie List</h1>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:p-6">
         {movies &&
           movies.map((movie) => {
             const isWatched = watched.some((w) => w.id === movie.id)
