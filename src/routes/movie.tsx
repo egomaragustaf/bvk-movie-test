@@ -1,11 +1,15 @@
 import { useContext, useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import AppContext from "~/states/context";
 import apiClient from "~/services/apiClient";
 import { Layout } from "~/components/layout/layout";
-import { HeaderMovie } from "~/components/shared/header-movie"; // assuming this is the correct path
-import { Movie as MovieType } from "../types";
+import { HeaderMovie } from "~/components/shared/header-movie";
 import watchedReducer from "~/states/watched-reducer";
+import { DescriptionMovie } from "~/components/shared/description-movie";
+import { TopCastMovie } from "~/components/shared/top-cast-movie";
+
+import { Movie as MovieType } from "../types";
 
 const loadFromLocalStorage = () => {
   const data = localStorage.getItem("watchedMovies");
@@ -72,11 +76,19 @@ export default function MovieDetail() {
   return (
     <Layout>
       {movie ? (
-        <HeaderMovie
-          movie={movie}
-          onClick={() => handleClick(movie)}
-          isWatched={isWatched}
-        />
+        <>
+          <HeaderMovie
+            movie={movie}
+            onClick={() => handleClick(movie)}
+            isWatched={isWatched}
+          />
+          <DescriptionMovie
+            movie={movie}
+            onClick={() => handleClick(movie)}
+            isWatched={isWatched}
+          />
+          <TopCastMovie credits={movie.credits} />
+        </>
       ) : (
         <p>Loading...</p>
       )}

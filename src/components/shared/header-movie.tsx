@@ -1,6 +1,9 @@
 import { IconStarFilled } from "@tabler/icons-react";
 import { Movie } from "~/types";
 import { WatchedButton } from "./watched-button";
+import { yearReleased } from "~/utils/year-released";
+import { BadgeMeta } from "./badge-meta";
+import { runtime } from "~/utils/runtime";
 
 interface HeaderMovieProps {
   movie?: Movie;
@@ -9,6 +12,8 @@ interface HeaderMovieProps {
 }
 
 export function HeaderMovie({ movie, isWatched, onClick }: HeaderMovieProps) {
+  const genres = movie?.genres?.map((genre) => genre.name).join(", ");
+
   return (
     <div className="relative w-full h-[600px] overflow-hidden">
       <img
@@ -29,10 +34,17 @@ export function HeaderMovie({ movie, isWatched, onClick }: HeaderMovieProps) {
               className="w-full max-w-[300px] rounded-lg shadow-lg"
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 hidden md:block">
             <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
-              {movie?.title}
+              {movie?.title} ({yearReleased(movie?.release_date)})
             </h1>
+
+            <div className="flex gap-2">
+              <BadgeMeta>{yearReleased(movie?.release_date)}</BadgeMeta>
+              <BadgeMeta>{genres}</BadgeMeta>
+              <BadgeMeta>{runtime(movie?.runtime ?? 0)}</BadgeMeta>
+            </div>
+
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-0.5">
                 <IconStarFilled className="text-yellow-400 mr-2" size={20} />
@@ -41,6 +53,7 @@ export function HeaderMovie({ movie, isWatched, onClick }: HeaderMovieProps) {
                 {Math.floor((movie?.vote_average ?? 0) * 10) / 10}
               </span>
             </div>
+
             <p className="text-gray-200">{movie?.overview}</p>
             <WatchedButton isWatched={isWatched} onClick={onClick} />
           </div>
