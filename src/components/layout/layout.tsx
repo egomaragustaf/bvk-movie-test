@@ -1,4 +1,5 @@
 import { Navbar } from "~/components/layout/navbar";
+import { Footer } from "~/components/layout/footer";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ export function Layout({ children }: LayoutProps) {
       <main className="mx-auto max-w-7xl min-h-screen px-4 mt-16 space-y-8">
         {children}
       </main>
+      <Footer />
     </div>
   );
 }
