@@ -1,7 +1,7 @@
 import { Movie } from "~/types";
-import CastMovie from "~/components/shared/cast-movie";
+import { CastMovie } from "~/components/shared/cast-movie";
 
-export function TopCast({ credits }: { credits: Movie["credits"] }) {
+export function TopCastMovie({ credits }: { credits: Movie["credits"] }) {
   return (
     <div className="mb-10">
       <h3 className="text-xl font-bold mb-5">Top Cast</h3>
