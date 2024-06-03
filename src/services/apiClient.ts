@@ -1,15 +1,15 @@
 import axios, { CanceledError } from "axios";
 
 export default axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_TMDB_API_URL,
   params: {
     language: "en-US",
-    api_key: import.meta.env.VITE_API_KEY,
+    api_key: import.meta.env.VITE_TMDB_API_KEY,
     append_to_response: "credits,keywords,reviews",
   },
   headers: {
     Accept: "application/json",
-    Authorization: `Bearer ${import.meta.env.VITE_API_SECRET}`,
+    Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_SECRET}`,
   },
 });
 
