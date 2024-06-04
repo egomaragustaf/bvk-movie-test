@@ -10,6 +10,7 @@ import { DescriptionMovie } from "~/components/shared/description-movie";
 import { TopCastMovie } from "~/components/shared/top-cast-movie";
 
 import { Movie as MovieType } from "../types";
+import { FormCommentMovie } from "~/components/shared/form-comment-movie";
 
 const loadFromLocalStorage = () => {
   const data = localStorage.getItem("watchedMovies");
@@ -23,6 +24,18 @@ const saveToLocalStorage = (movies: MovieType[]) => {
   localStorage.setItem("watchedMovies", JSON.stringify(movies));
 };
 
+const loadCommentsFromLocalStorage = (movieId: number) => {
+  const data = localStorage.getItem(`comments-${movieId}`);
+  if (data) {
+    return JSON.parse(data) as string[];
+  }
+  return [];
+};
+
+const saveCommentsToLocalStorage = (movieId: number, comments: string[]) => {
+  localStorage.setItem(`comments-${movieId}`, JSON.stringify(comments));
+};
+
 export default function MovieDetail() {
   const params = useParams();
   const { watchedMovies, dispatchApp } = useContext(AppContext);
@@ -32,6 +45,7 @@ export default function MovieDetail() {
     [],
     loadFromLocalStorage
   );
+  const [comments, setComments] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +58,7 @@ export default function MovieDetail() {
         });
 
         document.title = `${res.data.title} (${res.data.release_date}) - BVK Movie`;
+        setComments(loadCommentsFromLocalStorage(parseInt(params.id!)));
       } catch (error) {
         console.error("Failed to fetch movie details:", error);
       }
@@ -60,6 +75,12 @@ export default function MovieDetail() {
     saveToLocalStorage(watched);
   }, [watched]);
 
+  useEffect(() => {
+    if (movie) {
+      saveCommentsToLocalStorage(movie.id, comments);
+    }
+  }, [comments, movie]);
+
   const handleClick = (movie: MovieType) => {
     const isExist = watched.some((w) => w.id === movie.id);
     if (isExist) {
@@ -69,10 +90,11 @@ export default function MovieDetail() {
     }
   };
 
-  const isWatched = watched.some((w) => w.id === movie?.id)
-    ? "checked"
-    : "default";
+  const handleAddComment = (comment: string) => {
+    setComments((prevComments) => [...prevComments, comment]);
+  };
 
+  const isWatched = watched.some((w) => w.id === movie?.id);
   return (
     <Layout>
       {movie ? (
@@ -80,14 +102,32 @@ export default function MovieDetail() {
           <HeaderMovie
             movie={movie}
             onClick={() => handleClick(movie)}
-            isWatched={isWatched}
+            isWatched={isWatched ? "checked" : "default"}
           />
           <DescriptionMovie
             movie={movie}
             onClick={() => handleClick(movie)}
-            isWatched={isWatched}
+            isWatched={isWatched ? "checked" : "default"}
           />
           <TopCastMovie credits={movie.credits} />
+          {isWatched && (
+            <>
+              <FormCommentMovie
+                movieId={movie.id}
+                onAddComment={handleAddComment}
+              />
+              <div className="mt-4 space-y-2">
+                <h2 className="text-xl font-semibold">Comments</h2>
+                <ul className="list-disc pl-5 space-y-4">
+                  {comments.map((comment, index) => (
+                    <li key={index} className="border-b pb-4">
+                      {comment}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <p>Loading...</p>
