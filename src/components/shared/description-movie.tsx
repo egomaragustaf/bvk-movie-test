@@ -37,7 +37,7 @@ export function DescriptionMovie({
             {Math.floor((movie?.vote_average ?? 0) * 10) / 10}
           </span>
         </div>
-        <p className="text-gray-200">{movie?.overview}</p>
+        <p>{movie?.overview}</p>
         <WatchedButton isWatched={isWatched} onClick={onClick} />
       </div>
     </div>
